@@ -33,7 +33,7 @@ Read it carefully and return ONLY a single valid JSON object (no markdown fences
   "seller": { "sellerName":"", "sellerAddress":"", "sellerState":"", "sellerGSTIN":"", "sellerPhone":"", "sellerEmail":"", "sellerJurisdiction":"" },
   "buyer": { "buyerName":"", "buyerBilling":"", "sameAsBilling":true, "buyerShipping":"", "buyerState":"", "buyerGSTIN":"" },
   "docMeta": { "docNumber":"", "docDate":"YYYY-MM-DD", "date2":"YYYY-MM-DD", "refNumber":"", "paymentTerms":"", "placeOfSupply":"" },
-  "items": [ { "description":"", "hsn":"", "unit":"Nos", "qty":0, "rate":0, "discount":0, "tax":18 } ],
+  "items": [ { "description":"", "hsn":"", "pack":"", "unit":"Nos", "qty":0, "rate":0, "discount":0, "tax":18 } ],
   "otherCharge": { "desc":"", "amount":0, "tax":18 },
   "bank": { "name":"", "branch":"", "accNo":"", "ifsc":"", "accName":"" },
   "terms": "",
@@ -130,6 +130,7 @@ function parseDocumentText(text) {
       data.items.push({
         description: m[2].trim(),
         hsn: m[3],
+        pack: '',
         unit: m[5],
         qty: parseFloat(m[4].replace(/,/g, '')),
         rate: parseFloat(m[6].replace(/,/g, '')),

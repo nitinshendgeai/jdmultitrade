@@ -349,7 +349,7 @@ const UNIT_OPTIONS = ["Nos","Kg","Ltr","Box","Set","Meter","Sqrft","Pcs","Ton","
 
 function newItem(){
   itemSeq++;
-  return {id:itemSeq, description:'', hsn:'', unit:'Nos', qty:1, rate:0, discount:0, tax:18};
+  return {id:itemSeq, description:'', hsn:'', pack:'', unit:'Nos', qty:1, rate:0, discount:0, tax:18};
 }
 
 function addItem(){
@@ -385,6 +385,7 @@ function renderItemForm(){
       </div>
       <div class="item-grid">
         <div class="field"><label>HSN / SAC</label><input type="text" value="${escapeAttr(it.hsn)}" oninput="updateItem(${it.id},'hsn',this.value)"></div>
+        <div class="field"><label>Pack Size</label><input type="text" value="${escapeAttr(it.pack)}" placeholder="e.g. 20 Ltr" oninput="updateItem(${it.id},'pack',this.value)"></div>
         <div class="field"><label>Unit</label>
           <select onchange="updateItem(${it.id},'unit',this.value)">
             ${UNIT_OPTIONS.map(u=>`<option value="${u}" ${u===it.unit?'selected':''}>${u}</option>`).join('')}
@@ -589,7 +590,7 @@ ${S('sellerPhone')?('Ph: '+escapeHtml(S('sellerPhone'))+'  '):''}${S('sellerEmai
     <table class="items">
       <thead>
         <tr>
-          <th>Sl No.</th><th>Description of Goods</th><th>HSN/SAC</th>
+          <th>Sl No.</th><th>Description of Goods</th><th>HSN/SAC</th><th>Pack Size</th>
           <th class="num">Quantity</th><th class="num">Rate</th><th>per</th><th class="num">Disc %</th>
           <th class="num">Amount</th>
         </tr>
@@ -600,6 +601,7 @@ ${S('sellerPhone')?('Ph: '+escapeHtml(S('sellerPhone'))+'  '):''}${S('sellerEmai
             <td>${i+1}</td>
             <td>${escapeHtml(r.description)||'—'}</td>
             <td>${escapeHtml(r.hsn)||'—'}</td>
+            <td>${escapeHtml(r.pack)||'—'}</td>
             <td class="num">${r.qty.toLocaleString('en-IN')}</td>
             <td class="num">${fmt(r.rate)}</td>
             <td>${r.unit}</td>
@@ -608,18 +610,18 @@ ${S('sellerPhone')?('Ph: '+escapeHtml(S('sellerPhone'))+'  '):''}${S('sellerEmai
           </tr>`).join('')}
         ${hasOtherCharge?`
         <tr class="extra-row">
-          <td></td><td>${escapeHtml(ocDesc)}</td><td></td><td class="num"></td><td class="num"></td><td></td><td class="num"></td>
+          <td></td><td>${escapeHtml(ocDesc)}</td><td></td><td></td><td class="num"></td><td class="num"></td><td></td><td class="num"></td>
           <td class="num">${fmt(ocAmount)}</td>
         </tr>`:''}
         ${intraState?`
-        <tr class="extra-row"><td colspan="7">Output CGST</td><td class="num">${fmt(cgstTotal)}</td></tr>
-        <tr class="extra-row"><td colspan="7">Output SGST</td><td class="num">${fmt(sgstTotal)}</td></tr>
+        <tr class="extra-row"><td colspan="8">Output CGST</td><td class="num">${fmt(cgstTotal)}</td></tr>
+        <tr class="extra-row"><td colspan="8">Output SGST</td><td class="num">${fmt(sgstTotal)}</td></tr>
         `:`
-        <tr class="extra-row"><td colspan="7">Output IGST</td><td class="num">${fmt(igstTotal)}</td></tr>
+        <tr class="extra-row"><td colspan="8">Output IGST</td><td class="num">${fmt(igstTotal)}</td></tr>
         `}
-        ${doRound?`<tr class="extra-row"><td colspan="7">Round Off</td><td class="num">${roundOffAmt>=0?'+':''}${fmt(roundOffAmt)}</td></tr>`:''}
+        ${doRound?`<tr class="extra-row"><td colspan="8">Round Off</td><td class="num">${roundOffAmt>=0?'+':''}${fmt(roundOffAmt)}</td></tr>`:''}
         <tr class="total-row">
-          <td colspan="3">Total</td>
+          <td colspan="4">Total</td>
           <td class="num">${sameUnit?totalQty.toLocaleString('en-IN'):''}</td>
           <td colspan="3">${sameUnit?rows[0].unit:''}</td>
           <td class="num">₹ ${fmt(roundedTotal)}</td>
@@ -711,7 +713,7 @@ function saveData(){
       docNumber:val('docNumber'), docDate:val('docDate'), date2:val('date2'), refNumber:val('refNumber'),
       paymentTerms:val('paymentTerms'), placeOfSupply:val('placeOfSupply')
     },
-    items: items.map(it=>({description:it.description, hsn:it.hsn, unit:it.unit, qty:it.qty, rate:it.rate, discount:it.discount, tax:it.tax})),
+    items: items.map(it=>({description:it.description, hsn:it.hsn, pack:it.pack, unit:it.unit, qty:it.qty, rate:it.rate, discount:it.discount, tax:it.tax})),
     otherCharge: { desc:val('otherChargeDesc'), amount:document.getElementById('otherChargeAmount').value, tax:document.getElementById('otherChargeTax').value },
     bank: { name:val('bankName'), branch:val('bankBranch'), accNo:val('bankAccNo'), ifsc:val('bankIFSC'), accName:val('bankAccName') },
     terms: val('termsText'),
@@ -764,7 +766,7 @@ function loadData(event){
     itemSeq = 0;
     items = (data.items||[]).map(it=>{
       itemSeq++;
-      return {id:itemSeq, description:it.description||'', hsn:it.hsn||'', unit:it.unit||'Nos',
+      return {id:itemSeq, description:it.description||'', hsn:it.hsn||'', pack:it.pack||'', unit:it.unit||'Nos',
         qty:parseFloat(it.qty)||0, rate:parseFloat(it.rate)||0, discount:parseFloat(it.discount)||0, tax:parseFloat(it.tax)||0};
     });
     if(items.length===0) items=[newItem()];
