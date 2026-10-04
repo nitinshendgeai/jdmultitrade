@@ -424,7 +424,6 @@ function setDocType(t){
   document.getElementById('lblDocDate').textContent = isInv ? 'Invoice Date' : isPF ? 'Proforma Date' : isQT ? 'Quotation Date' : 'PO Date';
   document.getElementById('lblDate2').textContent = isInv ? 'Due Date' : (isPF||isQT) ? 'Valid Until' : 'Expected Delivery';
   document.getElementById('lblRef').textContent = isInv ? 'Against PO No.' : isPF ? 'Reference No.' : isQT ? 'Enquiry Ref.' : 'Quotation Ref.';
-  document.getElementById('bankSection').style.display = (t==='po'||t==='quotation') ? 'none' : 'block';
   if(!document.getElementById('termsText').value){
     document.getElementById('termsText').value = isInv
       ? "Payment due within the agreed credit period. Goods once sold will not be taken back. Subject to jurisdiction of local courts only."
@@ -671,23 +670,17 @@ ${S('sellerPhone')?('Ph: '+escapeHtml(S('sellerPhone'))+'  '):''}${S('sellerEmai
         <div class="label">${isFullDoc?'Declaration':'Terms &amp; Conditions'}</div>
         ${escapeHtml(S('termsText'))}
       </div>
-      ${isFullDoc?`
       <div class="bank-box">
         <div class="label">Company's Bank Details</div>
         <div>Bank Name: ${escapeHtml(S('bankName'))||'—'}</div>
+        <div>A/c Name: ${escapeHtml(S('bankAccName'))||'—'}</div>
         <div>A/c No.: ${escapeHtml(S('bankAccNo'))||'—'}</div>
         <div>Branch &amp; IFS Code: ${escapeHtml(S('bankBranch'))||'—'}${S('bankIFSC')?(' & '+escapeHtml(S('bankIFSC'))):''}</div>
         <div class="sign-block">
           <div>for ${escapeHtml(S('sellerName'))||'Your Company Name'}</div>
           <div class="line">${escapeHtml(S('signatoryName'))||'Authorised Signatory'}</div>
         </div>
-      </div>`:`
-      <div class="bank-box">
-        <div class="sign-block">
-          <div>for ${escapeHtml(S('sellerName'))||'Your Company Name'}</div>
-          <div class="line">${escapeHtml(S('signatoryName'))||'Authorised Signatory'}</div>
-        </div>
-      </div>`}
+      </div>
     </div>
 
     <div class="footer-note">
