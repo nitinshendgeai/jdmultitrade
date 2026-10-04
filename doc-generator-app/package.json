@@ -1,0 +1,20 @@
+{
+  "name": "document-generator-ai",
+  "version": "1.0.0",
+  "private": true,
+  "description": "PO / Quotation / Proforma / Tax Invoice generator with free PDF text-extraction and optional AI scan-to-fill",
+  "main": "server.js",
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.32.0",
+    "express": "^4.19.2",
+    "multer": "^1.4.5-lts.1",
+    "pdf-parse": "^1.1.1",
+    "dotenv": "^16.4.5"
+  }
+}
