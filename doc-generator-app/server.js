@@ -22,7 +22,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.json());
 
 // Model used only as a fallback (messy PDFs) or for images/handwriting.
-const EXTRACTION_MODEL = 'claude-sonnet-5';
+const EXTRACTION_MODEL = 'claude-sonnet-5-5';
 
 const EXTRACTION_PROMPT = `You are extracting structured data from a business document — a Purchase Order, Quotation, Proforma Invoice, or Tax Invoice. It may be a clean PDF's text, a scanned photo, or a handwritten note.
 
